@@ -27,13 +27,14 @@ const SearchBar = (props) => {
     }
 
     const sendOutput = (input, type) => {
+        props.setLoading(true);
         let url = (type == 'rhymes') ? getRhymeUrl(input) : getSimilarToUrl(input);
         datamuseRequest(url, res => {
-            console.log('...loading');
             console.log(res);
             props.setOutput(res);
             props.setType(type);
             props.setTerm(input);
+            props.setLoading(false);
         });
     }
 

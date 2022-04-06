@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 
 const WordOutput = (props) => {
-    // const [output, setOutput] = useState('...loading');
-
     const groupBy = (objects, property) => {
         // If property is not a function, convert it to a function that accepts one argument (an object) and returns that object's
         // value for property (obj[property])
@@ -32,23 +30,31 @@ const WordOutput = (props) => {
     }
 
     const displayRhymes = () => {
-        const result = []
-        let output_grouped = groupBy(props.output, "numSyllables");
-        for (var num in output_grouped) {
-            result.push(<h3 key={`syllables_${num}`}>Syllables: {num}</h3>);
-            let result_syl = output_grouped[num].map((term, idx) => {
-                return <li key={`${num}_${idx}`}>{term['word']}<Button onClick={() => props.onSave(term['word'])} variant="outline-success" className="save-btn">Save</Button></li>;
-            });
-            result.push(result_syl);
+        if (props.loading) {
+            return 'loading...'
+        } else {
+            const result = []
+            let output_grouped = groupBy(props.output, "numSyllables");
+            for (var num in output_grouped) {
+                result.push(<h3 key={`syllables_${num}`}>Syllables: {num}</h3>);
+                let result_syl = output_grouped[num].map((term, idx) => {
+                    return <li key={`${num}_${idx}`}>{term['word']}<Button onClick={() => props.onSave(term['word'])} variant="outline-success" className="save-btn">Save</Button></li>;
+                });
+                result.push(result_syl);
+            }
+            return result;
         }
-        return result;
     }
 
     const displaySynonyms = () => {
-        let result = props.output.map((term, idx) => {
-            return <li key={idx}>{term['word']}<Button onClick={() => props.onSave(term['word'])} variant="outline-success" className="save-btn">Save</Button></li>;
-        });
-        return result;
+        if (props.loading) {
+            return 'loading...'
+        } else {
+            let result = props.output.map((term, idx) => {
+                return <li key={idx}>{term['word']}<Button onClick={() => props.onSave(term['word'])} variant="outline-success" className="save-btn">Save</Button></li>;
+            });
+            return result;
+        }
     }
 
     if (props.output.length === 0) {
